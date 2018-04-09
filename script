@@ -1,0 +1,317 @@
+#!/bin/bash
+# Purpose: Display various options to run scripts using a menu
+# Author: Eric English
+# ---------------------------------------------------------------------------
+# capture CTRL+C, CTRL+Z and quit singles using the trap
+trap '' SIGINT
+trap ''  SIGQUIT
+trap '' SIGTSTP
+ 
+# display message and pause 
+pause(){
+	local m="$@"
+	echo "$m"
+	read -p "Press [Enter] key to continue..." key
+}
+echo "This menu can run the following scripts: Whois, NSLookup, NMAP, Firewalk, Harvester, Fierce, and Nikto."
+echo ""
+echo "It also creates output files for each script that is run."
+echo ""
+echo "This script creates folders on your desktop for the various scans."
+echo ""
+echo "When you enter the name of the client it creates the various script subfolders in the client folder."
+echo ""
+echo "Please enter the name of the client (no spaces)" 
+read client
+echo ""
+mkdir /home/user/Desktop/$client/
+mkdir /home/user/Desktop/$client/NMAP/
+mkdir /home/user/Desktop/$client/NMAP/Firewalk/
+mkdir /home/user/Desktop/$client/Harvester/
+mkdir /home/user/Desktop/$client/Fierce/
+mkdir /home/user/Desktop/$client/Nikto/
+mkdir /home/user/Desktop/$client/Whois/
+mkdir /home/user/Desktop/$client/NSLookup/
+mkdir /home/user/Desktop/$client/Joomla/
+mkdir /home/user/Desktop/$client/Hydra/
+mkdir /home/user/Desktop/$client/WPScan/
+mkdir /home/user/Desktop/$client/Metagoofil/
+# set an 
+while :
+do
+	# show menu
+	clear
+	echo "-------------------------------------"
+	echo "	  S C R I P T - M E N U"
+	echo "-------------------------------------"
+	echo "1. Run NMAP Script Treating All Hosts As Up (-Pn)"
+	echo "2. Run NMAP Script As Usual"
+	echo "3. Run NMAP Firewalk Script on Multiple Hosts"
+	echo "4. Run NMAP Firewalk Script on Multiple Hosts with -Pn"
+	echo "5. Run NMAP Firewalk Script on a single host"
+	echo "6. Run WhoIs Lookup"
+	echo "7. NSLookup (MX and DNS)"
+	echo "8. Run The Harvester"
+	echo "9. Run Fierce DNS Lookup"
+	echo "10. Run Nikto Web Vulnerability Scan"
+	echo "11. Run Joomla Vulnerability Scan"
+	echo "12. Hydra Password Attack"
+	echo "13. Word Press Vulnerability Scan"
+	echo "14. All-in-One"
+	echo "15. AIO for domains (NSLookup, WhoIs, Fierce, Harvester, Nikto)"
+	echo "16. Change Client Folder Permissions"
+	echo "17. Metagoofil"
+	echo "18. Change Metasploit Folder Permissions"
+	echo "19. Exit"
+	echo "-------------------------------------"
+	read -r -p "Enter your choice [1-19] : " c
+	# take action
+	case $c in
+		1) echo NMAP scanning started 
+		   `nmap -sn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_identify_live_hosts_Pn.txt`
+  		   `nmap -sM -Pn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_FIN_ACK_Pn.txt`
+  		   `nmap -Pn --traceroute --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_ident_perm_network_tr_Pn.txt`
+   		   `nmap -sS -Pn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_TCP_SYN_Pn.txt`
+  		   `nmap -sF -Pn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_TCP_FIN_Pn.txt`
+   		   `nmap -sN -Pn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_TCP_NULL_Pn.txt`
+  		   `nmap -sM -Pn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_MAIMON_Pn.txt`
+  		   `nmap -sX -Pn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_XMAS_Pn.txt`
+  		   `nmap -sO -Pn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_tcpip_stack_fingerprinting_Pn.txt`
+  		   `nmap -sU -Pn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_UDP_Pn.txt`
+  		   `nmap -sV -Pn -O -f --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_banner_grabbing_Pn.txt` #frag on for IDS evasion
+		   echo ""
+		   echo NMAP scanning completed
+		   echo ""
+		   read -rsp $'All done with NMAP Pn scan. Press enter to continue...\n';;
+		2) echo NMAP scanning started 
+		   `nmap -sn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_identify_live_hosts.txt`
+  		   `nmap -sM --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_FIN_ACK.txt`
+  		   `nmap --traceroute --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_ident_perm_network_tr.txt`
+   		   `nmap -sS --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_TCP_SYN.txt`
+  		   `nmap -sF --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_TCP_FIN.txt`
+   		   `nmap -sN --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_TCP_NULL.txt`
+  		   `nmap -sM --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_MAIMON.txt`
+  		   `nmap -sX --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_XMAS.txt`
+  		   `nmap -sO --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_tcpip_stack_fingerprinting.txt`
+  		   `nmap -sU --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_UDP.txt`
+  		   `nmap -sV -O -f --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_banner_grabbing.txt` #frag on for IDS evasion
+		   echo "" 
+		   echo NMAP scanning completed
+		   echo ""
+		   read -rsp $'All done with NMAP scan. Press enter to continue...\n';;
+		3) echo ""
+		   echo Firewalk Scan Starting
+		   echo ""
+		   echo "IMPORTANT PLEASE READ!"
+		   echo "In order for the Firewalk script to work you must"
+		   echo "format your targets.txt file a specific way. Make"
+		   echo "sure that your hosts are all on one line, and there"
+		   echo "are no commas in between each host before you run Firewalk"
+		   echo "(i.e. 10.1.1.1 10.2.2.2 10.3.3.3 dontgothere.com)"
+		   echo ""
+		   echo "Enter the name for the file output (no spaces)"
+		   read file
+		   echo -ne '#####                     (33%)\r'
+		   sleep 1
+		   `nmap --append-output --script=firewalk --traceroute -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/Firewalk/firewalk_$file.txt`
+		   echo -ne '#############             (66%)\r'
+		   sleep 1
+		   echo -ne '#######################   (100%)\r'
+		   echo -ne '\n' 
+		   read -rsp $'All done with this Firewalk scan. Press enter to continue...\n';;
+		4) echo ""
+		   echo Firewalk Scan Starting
+		   echo ""
+		   echo "IMPORTANT PLEASE READ!"
+		   echo "In order for the Firewalk script to work you must"
+		   echo "format your targets.txt file a specific way. Make"
+		   echo "sure that your hosts are all on one line, and there"
+		   echo "are no commas in between each host before you run Firewalk"
+		   echo "(i.e. 10.1.1.1 10.2.2.2 10.3.3.3 dontgothere.com)"
+		   echo ""
+		   echo "Enter the name for the file output (no spaces)"
+		   read file
+		   `nmap --append-output --script=firewalk --traceroute -Pn -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/Firewalk/firewalk_Pn_$file.txt` 
+		   read -rsp $'All done with this Firewalk scan. Press enter to continue...\n';;
+		5) echo ""
+		   echo "Enter a single IP or domain name"
+		   read host
+		   echo ""
+		   echo "Enter a name for the file output (no spaces)"
+		   read file
+		   `nmap --append-output --script=firewalk --traceroute "$host" > /home/user/Desktop/$client/NMAP/Firewalk/$file_firewalk_single_host.txt`
+		   read -rsp $'All done with this Firewalk scan. Press enter to continue...\n';;
+		6) echo ""
+		   echo "Whois Lookup Starting"
+		   echo ""
+		   echo "Please enter a domain name for a Whois lookup"
+		   read dn
+		   echo "Please enter a name for the file output (no spaces)"
+		   read file
+		   whois "$dn" > /home/user/Desktop/$client/Whois/Whois_$file.txt
+		   read -rsp $'All done with this WhoIs lookup. Press enter to continue...\n';;
+		7) echo ""
+		   echo "NSLookup Starting (DNS and MX)"
+		   echo ""
+		   echo "Enter a single domain name"
+		   read dn
+		   echo "Enter a name for the file output (no spaces)"
+		   read file
+		   nslookup -type=ns $dn > /home/user/Desktop/$client/NSLookup/dns_$file.txt
+		   nslookup -type=mx $dn > /home/user/Desktop/$client/NSLookup/mx_$file.txt
+		   read -rsp $'All done with this nslookup. Press enter to continue...\n';;
+		8) echo ""
+		   echo "Email Harvest Starting"
+		   echo ""
+		   echo "Enter a single domain name"
+		   read dn
+		   echo "Enter a name for the file output (no spaces)"
+		   read file
+		   cd /home/user/Desktop/harvester
+		   ./theHarvester.py -d "$dn" -l 500 -b google > /home/user/Desktop/$client/Harvester/harvester_$file.txt
+		   read -rsp $'All done with this email harvest. Press enter to continue...\n';;
+		9) echo ""
+		   echo "Fierce DNS Scan Starting"
+		   echo ""
+		   echo "Enter a single domain name"
+		   read dn
+		   echo "Enter a name for the file output (no spaces)"
+		   read file
+		   #Change path to Fierce here
+		   /home/user/Desktop/fierce.pl -dns $dn > /home/user/Desktop/$client/Fierce/fierce_$file.txt
+		   read -rsp $'All done with this Fierce DNS scan. Press enter to continue...\n';;
+		10) echo ""
+		    echo "Nikto Website Vulnerability Scan Starting"
+		    echo ""
+		    echo "Enter a single domain name"
+		    read dn
+		    echo "Enter a name for the file output (no spaces)"
+		    read file
+		    nikto -update
+		    nikto -host $dn > /home/user/Desktop/$client/Nikto/nikto_$file.txt
+		    read -rsp $'All done with this Nikto scan. Press enter to continue...\n';;
+		11) echo ""
+		    echo "Joomla Vulnerability Scan Starting"
+		    echo "Enter a single domain name"
+		    read dn
+		    echo "Enter a name for the file output (no spaces)"
+		    read file
+		    joomscan update
+		    joomscan -u $dn > /home/user/Desktop/$client/Joomla/joomla_$file.txt
+		    read -rsp $'All done with this Joomla scan. Press enter to continue...\n';;
+		12) echo ""
+		    echo "Hydra Password Attack Starting"
+		    echo ""
+		    echo "Enter the URL and service to attack"
+		    echo "i.e. ftp://thatdomain.com, ssh://thatdomain.com"
+		    read url
+		    echo "Make sure you have users.txt, and passwords.txt on your Desktop!"
+		    echo ""
+		    echo "Enter a name for the file output (no spaces)"
+		    read file
+		    hydra -L /home/user/Desktop/users.txt -P /home/user/Desktop/passwords.txt $url > /home/user/Desktop/$client/Hydra/hydra_$file.txt
+		    read -rsp $'All done with this Hydra scan. Press enter to continue...\n';;
+		13) echo ""
+		    echo "Word Press Vulnerability Scan Starting"
+		    echo ""
+		    echo "Enter the URL to scan"
+		    read url
+		    echo ""
+		    echo "Enter a name for the file output (no spaces)"
+		    read file
+		    wpscan -u $url -f > /home/user/Desktop/$client/WPScan/WPScan_$file.txt;;
+		14) echo ""
+		    echo "Enter the URL to scan"
+		    read dn
+		    echo ""
+		    echo "Enter a name for the file output (no spaces)"
+		    read file
+		   `nmap -sn --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_identify_live_hosts.txt`
+		    echo -ne '#                            (1%)\r'
+		    sleep 1
+  		   `nmap -sM --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_FIN_ACK.txt`
+		    echo -ne '##                           (10%)\r'
+		    sleep 1
+  		   `nmap --traceroute --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_ident_perm_network_tr.txt`
+		    echo -ne '###                          (15%)\r'
+		    sleep 1
+   		   `nmap -sS --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_TCP_SYN.txt`
+		    echo -ne '#####                        (20%)\r'
+		    sleep 1
+  		   `nmap -sF --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_TCP_FIN.txt`
+		    echo -ne '#######                      (25%)\r'
+		    sleep 1
+   		   `nmap -sN --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_TCP_NULL.txt`
+		    echo -ne '#########                    (30%)\r'
+		    sleep 1
+  		   `nmap -sM --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_MAIMON.txt`
+		    echo -ne '###########                  (35%)\r'
+		    sleep 1
+  		   `nmap -sX --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_XMAS.txt`
+		    echo -ne '#############                (40%)\r'
+		    sleep 1
+  		   `nmap -sO --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_tcpip_stack_fingerprinting.txt`
+		    echo -ne '###############              (45%)\r'
+		    sleep 1
+  		   `nmap -sU --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_UDP.txt`
+		    echo -ne '#################            (50%)\r'
+		    sleep 1
+  		   `nmap -sV -O -f --append-output --host-timeout 30m -iL /home/user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/nmap_banner_grabbing.txt` #frag on for IDS evasion
+		    echo -ne '##################           (55%)\r'
+		    sleep 1
+		   `nmap --append-output --script=firewalk --traceroute -iL user/Desktop/targets.txt > /home/user/Desktop/$client/NMAP/Firewalk/firewalk_$file.txt`
+		    echo -ne '###################          (60%)\r'
+		    sleep 1
+		   whois "$dn" > /home/user/Desktop/$client/Whois/Whois_$file.txt
+		    echo -ne '####################         (65%)\r'
+		    sleep 1
+		   nslookup -type=ns $dn > /home/user/Desktop/$client/NSLookup/dns_$file.txt
+		    echo -ne '#####################        (70%)\r'
+		    sleep 1
+		   nslookup -type=mx $dn > /home/user/Desktop/$client/NSLookup/mx_$file.txt
+		    echo -ne '######################       (75%)\r'
+		    sleep 1
+		    cd /home/user/Desktop/harvester
+		    ./theHarvester.pl -d "$dn" -l 500 -b google > /home/user/Desktop/$client/Harvester/harvester_$file.txt
+		    echo -ne '########################     (80%)\r'
+		    sleep 1
+		   ./home/user/Desktop/fierce.pl -dns $dn > /home/user/Desktop/$client/Fierce/fierce_$file.txt
+		    echo -ne '##########################   (88%)\r'
+		    sleep 1
+		   nikto -host $dn > /home/user/Desktop/$client/Nikto/nikto_$file.txt
+		    echo -ne '############################ (96%)\r'
+		    sleep 1
+		   read -rsp $'All done with this All-in-One scan. Press enter to continue...\n';;
+		15) echo ""
+		    echo "Enter the URL to scan"
+		    read dn
+		    echo ""
+		    echo "Enter a name for the file output (no spaces)"
+		    read file 
+		    whois "$dn" > /home/user/Desktop/$client/Whois/Whois_$file.txt
+		    nslookup -type=ns $dn > /home/user/Desktop/$client/NSLookup/dns_$file.txt
+		    nslookup -type=mx $dn > /home/user/Desktop/$client/NSLookup/mx_$file.txt
+		    theharvester -d "$dn" -l 500 -b google > /home/user/Desktop/$client/Harvester/harvester_$file.txt
+		    cd /home/user/Desktop/Fierce/
+		    fierce -dns $dn > /home/user/Desktop/$client/Fierce/fierce_$file.txt
+		    nikto -host $dn > /home/user/Desktop/$client/Nikto/nikto_$file.txt
+		    read -rsp $'All done with this All-in-One scan. Press enter to continue...\n';;
+		16) echo ""
+		    echo "Change Client Folder Permissions"
+		    sudo chmod 777 -R /home/user/Desktop/$client
+		    read -rsp $'All done changing permissions. Press enter to continue...\n';;
+		17) echo ""
+		    echo "Enter a URL to scan for documents"
+		    read dn
+		    echo ""
+		    cd /home/user/Desktop/metagoofil
+		    python ./metagoofil.py -d "$dn" -t pdf,doc,xls,ppt,docx,pptx,xlsx -l 300 -n 75 -o /home/user/Desktop/$client/Metagoofil/ -f /home/user/Desktop/$client/Metagoofil/metadata.html
+		    read -rsp $'All done with metadata gathering. Press any key to continue...\n';;
+		18) echo ""
+		    echo "Change Metasploit Exploit Folder Permissions"
+		    sudo chmod 777 -R /opt/metasploit/apps/pro/tasks
+		    read -rsp $'All done changing permissions. Press enter to continue...\n';;
+		19) break;;
+		*) Pause "Select between 1 to 19 only"
+	esac
+done
